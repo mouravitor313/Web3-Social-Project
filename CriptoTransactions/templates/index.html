@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Wallet Balance and Transaction</title>
+</head>
+<body>
+    <h1>Check Wallet Balance</h1>
+    <form action="/balance" method="post">
+        Public ID: <input type="text" name="public_id"><br>
+        <input type="submit" value="Check Balance">
+    </form>
+
+    <h1>Make a Transaction</h1>
+    <form action="/transaction" method="post">
+        Public ID: <input type="text" name="public_id"><br>
+        Private Key: <input type="text" name="private_key"><br>
+        Estrangeira: <input type="text" name="estrangeira"><br>
+        Value: <input type="text" name="value"><br>
+        <input type="submit" value="Make Transaction">
+    </form>
+</body>
+</html>

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Simple Chat App</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+    <div id="chatbox">
+        <!-- Chat messages will be added here -->
+    </div>
+    <input type="text" id="messageInput" placeholder="Type your message...">
+    <button id="sendButton">Send</button>
+
+    <!-- Transaction form -->
+    <button id="transactionButton">Transfer</button>
+    <div id="transactionForm" style="display: none;">
+        Public ID: <input type="text" id="publicIdInput"><br>
+        Private Key: <input type="text" id="privateKeyInput"><br>
+        Foreign Key: <input type="text" id="foreignKeyInput"><br>
+        Value: <input type="text" id="valueInput"><br>
+        <button id="submitTransactionButton">Submit Transaction</button>
+    </div>
+
+    <script>
+        var socket = io.connect('http://localhost:5000');
+        socket.on('connect', function() {
+            socket.send('User connected!');
+        });
+
+        socket.on('message', function(msg) {
+            $('#chatbox').append('<p>' + msg + '</p>');
+        });
+
+        $('#sendButton').click(function() {
+            var message = $('#messageInput').val();
+            socket.send(message);
+            $('#messageInput').val('');
+        });
+
+        $('#transactionButton').click(function() {
+            $('#transactionForm').toggle();
+        });
+
+        $('#submitTransactionButton').click(function() {
+            var publicId = $('#publicIdInput').val();
+            var privateKey = $('#privateKeyInput').val();
+            var foreignKey = $('#foreignKeyInput').val();
+            var value = $('#valueInput').val();
+            socket.send(`transaction:${publicId}:${privateKey}:${foreignKey}:${value}`);
+            $('#publicIdInput').val('');
+            $('#privateKeyInput').val('');
+            $('#foreignKeyInput').val('');
+            $('#valueInput').val('');
+            $('#transactionForm').hide();
+        });
+    </script>
+</body>
+</html>
