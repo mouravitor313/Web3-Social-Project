@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 from flask_socketio import SocketIO, send
 from check_balance import Wallet
 from transaction import Transaction
@@ -6,6 +6,8 @@ from transaction import Transaction
 app = Flask(__name__)
 app.config['SECRET'] = 'secret!123'
 socketio = SocketIO(app, cors_allowed_origins = '*')
+
+posts = []
 
 @socketio.on('message')
 def handle_message(message):
@@ -33,6 +35,22 @@ def handle_message(message):
 @app.route('/')
 def index():
     return render_template("Cindex.html")
+
+@app.route('/post', methods=['POST'])
+def post():
+    content = request.form['content']
+    if len(content) <= 280:  # Limite de caracteres do Twitter
+        posts.append(content)
+        return 'Post criado com sucesso!'
+    else:
+        return 'Erro: O post excede o limite de 280 caracteres.'
+
+@app.route('/posts')
+def get_posts():
+    return render_template('posts.html', posts=posts)
+
+if __name__ == '__main__':
+    socketio.run(app, host='localhost')
 
 if __name__ == '__main__':
     socketio.run(app, host='localhost')
