@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Posts</title>
+</head>
+<body>
+    <!-- Formulário de postagem -->
+    <form action="/post" method="post">
+        <textarea name="content" placeholder="Escreva seu post aqui..." required></textarea><br>
+        <input type="submit" value="Postar">
+    </form>
+
+    <!-- Exibição de posts -->
+    {% for post in posts %}
+        <p>{{ post }}</p>
+    {% endfor %}
+
+    <!-- Link para a página de chat -->
+    <a href="/">Voltar ao Chat</a>
+</body>
+</html>
